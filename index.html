@@ -161,10 +161,13 @@
     position: fixed;
     inset: 0;
     z-index: 9000;
-    display: flex;
+    display: none;
     align-items: flex-start;
     justify-content: center;
     padding-top: 80px;
+  }
+  .search-overlay.active {
+    display: flex;
     animation: searchFadeIn 0.18s ease both;
   }
   @keyframes searchFadeIn {
@@ -6208,7 +6211,7 @@
 </div>
 
 <!-- SEARCH OVERLAY -->
-<div id="searchOverlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Site search" style="display:none">
+<div id="searchOverlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Site search">
   <div class="search-backdrop" onclick="closeSearch()"></div>
   <div class="search-modal">
     <div class="search-input-row">
@@ -20190,7 +20193,7 @@ function buildSearchIndex() {
 
 function openSearch() {
   const overlay = document.getElementById('searchOverlay');
-  overlay.style.display = 'flex';
+  overlay.classList.add('active');
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').innerHTML = '';
   document.getElementById('searchEmpty').style.display = 'none';
@@ -20201,7 +20204,7 @@ function openSearch() {
 }
 
 function closeSearch() {
-  document.getElementById('searchOverlay').style.display = 'none';
+  document.getElementById('searchOverlay').classList.remove('active');
   document.body.style.overflow = '';
   searchSelectedIdx = -1;
 }
@@ -20349,7 +20352,7 @@ document.addEventListener('keydown', e => {
   if (e.key === '/' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
     e.preventDefault(); openSearch();
   }
-  if (e.key === 'Escape' && document.getElementById('searchOverlay').style.display !== 'none') closeSearch();
+  if (e.key === 'Escape' && document.getElementById('searchOverlay').classList.contains('active')) closeSearch();
 });
 
 // ── INIT ──
